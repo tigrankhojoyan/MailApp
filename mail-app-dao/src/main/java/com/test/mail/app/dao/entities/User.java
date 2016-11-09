@@ -1,5 +1,6 @@
 package com.test.mail.app.dao.entities;
 
+import com.test.mail.app.dao.utils.CryptoConverter;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ public class User {
     private String userName;
 
     @Column(name = "PASSWORD", nullable = false)
+    @Convert(attributeName = "password", converter = CryptoConverter.class)
     private String password;
 
     @OneToOne(mappedBy="user")
