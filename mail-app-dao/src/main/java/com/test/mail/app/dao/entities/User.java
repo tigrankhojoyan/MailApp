@@ -1,9 +1,10 @@
 package com.test.mail.app.dao.entities;
 
-import com.test.mail.app.dao.utils.CryptoConverter;
+import com.test.mail.app.dao.utils.PBKDF2Generator;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+
 
 /**
  * Created by tigran on 11/6/16.
@@ -19,8 +20,8 @@ public class User {
     @Column(name = "USER_NAME", nullable = false)
     private String userName;
 
+    @Convert(converter = PBKDF2Generator.class)
     @Column(name = "PASSWORD", nullable = false)
-    @Convert(attributeName = "password", converter = CryptoConverter.class)
     private String password;
 
     @OneToOne(mappedBy="user")
