@@ -5,6 +5,7 @@ import com.test.mail.app.dao.entities.User;
 import com.test.mail.app.dao.entities.UserDetails;
 import com.test.mail.app.dao.entities.UserMusic;
 import com.test.mail.app.dao.entities.enums.Gender;
+import com.test.mail.app.dao.exceptions.DaoException;
 import com.test.mail.app.dao.services.impl.UserDaoImpl;
 import org.joda.time.LocalDate;
 import org.springframework.context.ApplicationContext;
@@ -21,11 +22,11 @@ import java.util.List;
 @EnableTransactionManagement
 public class Tester {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws DaoException {
         new Tester().tets();
     }
 
-    public void tets() {
+    public void tets() throws DaoException {
         ApplicationContext applicationContext =
                 new AnnotationConfigApplicationContext(HibernateConfiguration.class);
         UserDao userDao = (UserDao)applicationContext.getBean("userDao");
