@@ -1,9 +1,14 @@
 package com.test.mail.app.dao.entities;
 
 import com.test.mail.app.dao.utils.PBKDF2Generator;
+import com.test.mail.app.dao.utils.PatternConstants;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -14,19 +19,37 @@ import javax.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ID", unique = true, nullable = false)
+    private Long userId;
 
-    @Column(name = "USER_NAME", nullable = false)
+    @Column(name = "USER_NAME", nullable = false, unique = true)
+    @Size(min = PatternConstants.USERNAME_MIN_LENGTH, max = PatternConstants.USERNAME_MAX_LENGTH,
+            message = "UserName's length must be between 6 and 14.")//TODO change messages via @java.util.ResourceBundle
+    @Pattern(regexp = PatternConstants.USERNAME_PATTERN)
     private String userName;
 
     @Convert(converter = PBKDF2Generator.class)
     @Column(name = "PASSWORD", nullable = false)
+    /*@Size(min = PatternConstants.PASSWORD_MIN_LENGTH, max = PatternConstants.PASSWORD_MAX_LENGTH,
+            message = "UserName's length must be between 6 and 14.")*///TODO change messages via @java.util.ResourceBundle
+    /*@Pattern.List({
+            @Pattern(regexp = "(?=.*[0-9])", message = "Password must contain one digit."),
+            @Pattern(regexp = "(?=.*[a-z])", message = "Password must contain one lowercase letter."),
+            @Pattern(regexp = "(?=.*[A-Z])", message = "Password must contain one uppercase letter."),
+            @Pattern(regexp = "(?=\\S+$)", message = "Password must contain no whitespace.")
+    })*/
     private String password;
 
     @OneToOne(mappedBy="user")
     @Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private UserDetails userDetails;
+
+    @ManyToMany(targetEntity = UserMusic.class, cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+    @JoinTable(name = "MUSIC_ITEMS",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "music_id") })
+    private List<UserMusic> userMusics;
 
     public User() {
 
@@ -43,12 +66,12 @@ public class User {
         setUserDetails(userDetails);
     }
 
-    public long getId() {
-        return id;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {
@@ -75,6 +98,21 @@ public class User {
         this.userDetails = userDetails;
     }
 
+    public List<UserMusic> getUserMusics() {
+        return userMusics;
+    }
+
+    public void setUserMusics(List<UserMusic> userMusics) {
+        this.userMusics = userMusics;
+    }
+
+    public void addMusic(UserMusic music) {
+        if(userMusics == null) {
+            userMusics = new ArrayList<>();
+        }
+        userMusics.add(music);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -82,29 +120,31 @@ public class User {
 
         User user = (User) o;
 
-        if (id != user.id) return false;
-        if (!userName.equals(user.userName)) return false;
-        if (!password.equals(user.password)) return false;
-        return userDetails.equals(user.userDetails);
+        if (userId != null ? !userId.equals(user.userId) : user.userId != null) return false;
+        if (userName != null ? !userName.equals(user.userName) : user.userName != null) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (userDetails != null ? !userDetails.equals(user.userDetails) : user.userDetails != null) return false;
+        return !(userMusics != null ? !userMusics.equals(user.userMusics) : user.userMusics != null);
 
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + userName.hashCode();
-        result = 31 * result + password.hashCode();
-        result = 31 * result + userDetails.hashCode();
+        int result = userId != null ? userId.hashCode() : 0;
+        result = 31 * result + (userName != null ? userName.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (userMusics != null ? userMusics.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
+                "userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", userDetails=" + userDetails +
+                ", userMusics=" + userMusics +
                 '}';
     }
 }

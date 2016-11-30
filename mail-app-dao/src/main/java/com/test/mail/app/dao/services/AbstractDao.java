@@ -1,5 +1,7 @@
 package com.test.mail.app.dao.services;
 
+import com.test.mail.app.dao.exceptions.DaoException;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,15 +13,13 @@ public class AbstractDao {
     @Autowired
     private SessionFactory sessionFactory;
 
-    protected Session getSession() {
-        return sessionFactory.getCurrentSession();
+    public Session getSession() throws DaoException {
+        try {
+            return sessionFactory.getCurrentSession();
+        } catch (HibernateException e) {
+            throw new DaoException(e);
+        }
+
     }
 
-    public void persist(Object entity) {
-        getSession().save(entity);
-    }
-
-    public void delete(Object entity) {
-        getSession().delete(entity);
-    }
 }

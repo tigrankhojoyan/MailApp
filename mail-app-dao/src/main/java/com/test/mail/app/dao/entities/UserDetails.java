@@ -2,6 +2,7 @@ package com.test.mail.app.dao.entities;
 
 import com.test.mail.app.dao.entities.enums.Gender;
 import org.hibernate.annotations.*;
+import org.hibernate.annotations.Parameter;
 import org.joda.time.LocalDate;
 
 import javax.persistence.*;
@@ -15,12 +16,12 @@ import javax.persistence.Table;
 @Table(name="USER_DETAILS")
 public class UserDetails {
 
+    @GenericGenerator(name = "generator", strategy = "foreign",
+            parameters = @Parameter(name = "property", value = "user"))
     @Id
-    @Column(name="usr_id", unique=true, nullable=false)
-    @GeneratedValue(generator="gen")
-    @GenericGenerator(name="gen", strategy="foreign",
-            parameters = {@org.hibernate.annotations.Parameter(name="property", value="user")})
-    private long userDataId;
+    @GeneratedValue(generator = "generator")
+    @Column(name = "USER_DATA_ID", unique = true, nullable = false)
+    private Long userDataId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
@@ -31,6 +32,7 @@ public class UserDetails {
     private LocalDate birthDate;
 
     @Column(name = "GENDER")
+    @Enumerated(EnumType.STRING)
     private Gender gender;
 
     public UserDetails() {
@@ -81,18 +83,18 @@ public class UserDetails {
 
         UserDetails that = (UserDetails) o;
 
-        if (userDataId != that.userDataId) return false;
-        if (!user.equals(that.user)) return false;
-        if (!birthDate.equals(that.birthDate)) return false;
+        if (userDataId != null ? !userDataId.equals(that.userDataId) : that.userDataId != null) return false;
+        if (user != null ? !user.equals(that.user) : that.user != null) return false;
+        if (birthDate != null ? !birthDate.equals(that.birthDate) : that.birthDate != null) return false;
         return gender == that.gender;
 
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (userDataId ^ (userDataId >>> 32));
-        result = 31 * result + user.hashCode();
-        result = 31 * result + birthDate.hashCode();
+        int result = userDataId != null ? userDataId.hashCode() : 0;
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (birthDate != null ? birthDate.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         return result;
     }
@@ -101,7 +103,7 @@ public class UserDetails {
     public String toString() {
         return "UserDetails{" +
                 "userDataId=" + userDataId +
-                ", user=" + user +
+                ", user=" + user.getUserName() +
                 ", birthDate=" + birthDate +
                 ", gender=" + gender +
                 '}';

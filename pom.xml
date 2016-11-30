@@ -24,6 +24,8 @@
         <joda-time.version>2.3</joda-time.version>
         <junit-version>4.12</junit-version>
         <hsqldb-version>2.3.4</hsqldb-version>
+        <hibernate-jpa-version>1.0.0.Final</hibernate-jpa-version>
+        <hibernate-validator-version>5.3.3.Final</hibernate-validator-version>
     </properties>
 
 
@@ -79,7 +81,13 @@
             <dependency>
                 <groupId>org.hibernate.javax.persistence</groupId>
                 <artifactId>hibernate-jpa-2.1-api</artifactId>
-                <version>1.0.0.Final</version>
+                <version>${hibernate-jpa-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${hibernate-validator-version}</version>
             </dependency>
 
             <!-- HSQL -->

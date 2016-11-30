@@ -1,16 +1,12 @@
 package com.test.mail.app.dao.utils;
 
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-import java.security.Key;
 
 /**
  * Created by tigran on 11/9/16.
@@ -27,7 +23,7 @@ public class CryptoConverter implements AttributeConverter<String, String> {
 
     @Override
     public String convertToDatabaseColumn(String ccNumber) {
-        // do some encryption
+       /* // do some encryption
         Key key = new SecretKeySpec(KEY, "AES");
         try {
             Cipher c = Cipher.getInstance(ALGORITHM);
@@ -35,19 +31,21 @@ public class CryptoConverter implements AttributeConverter<String, String> {
             return Base64.encode(c.doFinal(ccNumber.getBytes()));
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
+        }*/
+        return "";
     }
 
     @Override
     public String convertToEntityAttribute(String dbData) {
         // do some decryption
-        Key key = new SecretKeySpec(KEY, "AES");
+      /*  Key key = new SecretKeySpec(KEY, "AES");
         try {
             Cipher c = Cipher.getInstance(ALGORITHM);
             c.init(Cipher.DECRYPT_MODE, key);
             return new String(c.doFinal(Base64.decode(dbData)));
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
+        }*/
+        return "";
     }
 }
