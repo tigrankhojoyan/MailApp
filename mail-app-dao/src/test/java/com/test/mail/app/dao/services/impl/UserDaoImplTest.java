@@ -109,6 +109,8 @@ public class UserDaoImplTest {
     }
 
     @Test
+    @Transactional
+    @Rollback(true)
     public void testDeleteUserByUserName() throws Exception {
         userDao.saveUser(testUser);
         userDao.deleteUserByUserName("testUserName");

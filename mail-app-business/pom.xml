@@ -12,5 +12,23 @@
     <groupId>com.test.mail.app.business</groupId>
     <artifactId>mail-app-business</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.test.mail.app.dao</groupId>
+            <artifactId>mail-app-dao</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+    </dependencies>
+
 
 </project>

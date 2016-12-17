@@ -10,7 +10,6 @@ import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,7 +17,6 @@ import java.util.List;
  * Created by tigran on 11/6/16.
  */
 @Repository("userDao")
-@Transactional
 public class UserDaoImpl extends AbstractDao implements UserDao {
 
     @Override
