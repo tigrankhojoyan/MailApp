@@ -38,7 +38,7 @@ public final class UserValidator {
     }
 
     public static void validateUserId(Long id) throws InvalidUserBusinessException {
-        if (!LongValidator.getInstance().isInRange(id, 0, Long.MAX_VALUE)) {
+        if (id != null && !LongValidator.getInstance().isInRange(id, 0, Long.MAX_VALUE)) {
             throw new InvalidUserBusinessException(
                     String.format("The userID must be between %d and %d", 0, Long.MAX_VALUE));
         }
