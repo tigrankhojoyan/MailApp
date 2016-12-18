@@ -28,6 +28,11 @@
         <hibernate-validator-version>5.3.3.Final</hibernate-validator-version>
         <commons-validator-version>1.5.1</commons-validator-version>
         <mockito-all-version>1.9.5</mockito-all-version>
+        <spring.security.version>4.1.0.RELEASE</spring.security.version>
+        <jackson-mapper-asl-version>1.9.13</jackson-mapper-asl-version>
+        <jackson-core-version>2.4.5</jackson-core-version>
+        <jackson-databind-version>2.4.5</jackson-databind-version>
+        <servlet-api-version>3.0.1</servlet-api-version>
     </properties>
 
 
@@ -43,6 +48,13 @@
                 <groupId>com.test.mail.app.business</groupId>
                 <artifactId>mail-app-business</artifactId>
                 <version>${project-version}</version>
+            </dependency>
+
+            <!-- Servlet API-->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${servlet-api-version}</version>
             </dependency>
 
             <!-- Spring -->
@@ -71,6 +83,57 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-orm</artifactId>
                 <version>${springframework.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>${springframework.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>commons-logging</artifactId>
+                        <groupId>commons-logging</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Spring Security -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-web</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-config</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+
+            <!-- Spring Security JSP Taglib -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-taglibs</artifactId>
+                <version>${spring.security.version}</version>
+            </dependency>
+
+            <!--Jackson libs-->
+            <dependency>
+                <groupId>org.codehaus.jackson</groupId>
+                <artifactId>jackson-mapper-asl</artifactId>
+                <version>${jackson-mapper-asl-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson-core-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson-databind-version}</version>
             </dependency>
 
             <!-- Hibernate -->
