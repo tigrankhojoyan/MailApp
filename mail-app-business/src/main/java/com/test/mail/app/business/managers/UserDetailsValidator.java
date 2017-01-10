@@ -23,7 +23,7 @@ public final class UserDetailsValidator {
         if(userDetails == null) {
             throw new InvalidUserDetailsBusinessException("UserDetails can't be NULL");
         }
-        validateId(userDetails.getUserDataId());
+//        validateId(userDetails.getUserDataId());
         validateBirthDate(userDetails.getBirthDate());
     }
 

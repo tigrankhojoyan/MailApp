@@ -33,11 +33,11 @@ public class Tester {
 
         UserDetails testUserDetails = new UserDetails(LocalDate.fromDateFields(new Date()), Gender.MALE);
         User testUser = new User("testUserName1", "testPassword1",  testUserDetails);
-        testUserDetails.setUser(testUser);
+//        testUserDetails.setUser(testUser);
 
         UserDetails testUserDetails1 = new UserDetails(LocalDate.fromDateFields(new Date()), Gender.FEMALE);
         User testUser1 = new User("testUserName2", "testPassword2",  testUserDetails1);
-        testUserDetails1.setUser(testUser1);
+//        testUserDetails1.setUser(testUser1);
 
         userDao.saveUser(testUser);
         userDao.saveUser(testUser1);

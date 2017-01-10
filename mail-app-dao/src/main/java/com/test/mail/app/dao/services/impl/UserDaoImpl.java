@@ -5,6 +5,7 @@ import com.test.mail.app.dao.entities.UserMusic;
 import com.test.mail.app.dao.exceptions.DaoException;
 import com.test.mail.app.dao.services.AbstractDao;
 import com.test.mail.app.dao.services.UserDao;
+import com.test.mail.app.dao.utils.SecurityUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;

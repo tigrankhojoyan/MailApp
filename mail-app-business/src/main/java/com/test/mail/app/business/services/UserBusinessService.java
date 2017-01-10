@@ -22,4 +22,6 @@ public interface UserBusinessService {
     void addMusic(String userName, UserMusic music) throws BusinessException, DaoException;
 
     List<UserMusic> getUserMusics(String userName) throws BusinessException, DaoException;
+
+    User loginUser(String userName, String password) throws BusinessException, DaoException;
 }

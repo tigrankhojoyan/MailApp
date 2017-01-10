@@ -8,24 +8,25 @@ import org.joda.time.LocalDate;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * Created by tigran on 11/6/16.
  */
 @Entity
 @Table(name="USER_DETAILS")
-public class UserDetails {
+public class UserDetails implements Serializable {
 
-    @GenericGenerator(name = "generator", strategy = "foreign",
-            parameters = @Parameter(name = "property", value = "user"))
+//    @GenericGenerator(name = "generator", strategy = "foreign",
+//            parameters = @Parameter(name = "property", value = "user"))
     @Id
-    @GeneratedValue(generator = "generator")
-    @Column(name = "USER_DATA_ID", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)//(generator = "generator")
+    @Column(name = "USER_DATA_ID", unique = true/*, nullable = false*/)
     private Long userDataId;
 
-    @OneToOne(fetch = FetchType.LAZY)
+   /* @OneToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
-    private User user;
+    private User user;*/
 
     @Column(name = "BIRTH_DATE", nullable = false)
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
@@ -36,13 +37,18 @@ public class UserDetails {
     private Gender gender;
 
     public UserDetails() {
-
     }
 
     public UserDetails(LocalDate birthDate, Gender gender) {
         setBirthDate(birthDate);
         setGender(gender);
     }
+
+/*    public UserDetails(LocalDate birthDate, Gender gender, User user) {
+        setBirthDate(birthDate);
+        setGender(gender);
+        setUser(user);
+    }*/
 
     public long getUserDataId() {
         return userDataId;
@@ -52,13 +58,13 @@ public class UserDetails {
         this.userDataId = userDataId;
     }
 
-    public User getUser() {
+   /* public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-    }
+    }*/
 
     public LocalDate getBirthDate() {
         return birthDate;
@@ -84,7 +90,7 @@ public class UserDetails {
         UserDetails that = (UserDetails) o;
 
         if (userDataId != null ? !userDataId.equals(that.userDataId) : that.userDataId != null) return false;
-        if (user != null ? !user.equals(that.user) : that.user != null) return false;
+//        if (user != null ? !user.equals(that.user) : that.user != null) return false;
         if (birthDate != null ? !birthDate.equals(that.birthDate) : that.birthDate != null) return false;
         return gender == that.gender;
 
@@ -93,7 +99,7 @@ public class UserDetails {
     @Override
     public int hashCode() {
         int result = userDataId != null ? userDataId.hashCode() : 0;
-        result = 31 * result + (user != null ? user.hashCode() : 0);
+//        result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (birthDate != null ? birthDate.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
         return result;
@@ -103,7 +109,7 @@ public class UserDetails {
     public String toString() {
         return "UserDetails{" +
                 "userDataId=" + userDataId +
-                ", user=" + user.getUserName() +
+//                ", user=" + user.getUserName() +
                 ", birthDate=" + birthDate +
                 ", gender=" + gender +
                 '}';

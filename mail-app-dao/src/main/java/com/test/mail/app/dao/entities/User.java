@@ -7,6 +7,7 @@ import org.hibernate.annotations.Cascade;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,11 +17,11 @@ import java.util.List;
  */
 @Entity
 @Table(name="users")
-public class User {
+public class User implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "USER_ID", unique = true, nullable = false)
+    @GeneratedValue//(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ID", unique = true/*, nullable = false*/)
     private Long userId;
 
     @Column(name = "USER_NAME", nullable = false, unique = true)
@@ -41,7 +42,8 @@ public class User {
     })*/
     private String password;
 
-    @OneToOne(mappedBy="user")
+    @OneToOne//(mappedBy="user")
+    @JoinColumn(name="USER_DATA_ID")
     @Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     private UserDetails userDetails;
 
@@ -63,6 +65,7 @@ public class User {
     public User(String userName, String password, UserDetails userDetails) {
         setUserName(userName);
         setPassword(password);
+//        userDetails.setUser(this);
         setUserDetails(userDetails);
     }
 

@@ -2,13 +2,14 @@ package com.test.mail.app.dao.entities;
 
 import javax.persistence.*;
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * Created by tigran on 11/13/16.
  */
 @Entity
 @Table(name="musics")
-public class UserMusic {
+public class UserMusic implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
