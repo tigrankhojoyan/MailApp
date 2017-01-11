@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 /**
@@ -36,12 +37,13 @@ public class UserMVCControllerImpl implements UserMVCController {
 
     @Override
     @RequestMapping(value="/login",method= RequestMethod.POST)
-    public ModelAndView executeLogeIn(@ModelAttribute("loginUser") User loginUser) {
+    public ModelAndView executeLogeIn(@ModelAttribute("loginUser") User loginUser, RedirectAttributes redirectAttributes) {
         ModelAndView modelAndView;
         try {
             User loggedInUser = userService.loginUser(loginUser.getUserName(), loginUser.getPassword());
             modelAndView = new ModelAndView(new RedirectView("user"));
-            modelAndView.addObject("loggedInUser", loggedInUser);
+            redirectAttributes.addFlashAttribute("loggedInUser", loggedInUser);
+//            modelAndView.addObject("loggedInUser", loggedInUser);
             return modelAndView;
         } catch (BusinessException e) {
             e.printStackTrace();
