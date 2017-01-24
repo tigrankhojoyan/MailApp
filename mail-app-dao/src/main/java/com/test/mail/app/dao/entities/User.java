@@ -3,6 +3,7 @@ package com.test.mail.app.dao.entities;
 import com.test.mail.app.dao.utils.PBKDF2Generator;
 import com.test.mail.app.dao.utils.PatternConstants;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -32,6 +33,7 @@ public class User implements Serializable {
 
     @Convert(converter = PBKDF2Generator.class)
     @Column(name = "PASSWORD", nullable = false)
+    @NotEmpty
     /*@Size(min = PatternConstants.PASSWORD_MIN_LENGTH, max = PatternConstants.PASSWORD_MAX_LENGTH,
             message = "UserName's length must be between 6 and 14.")*///TODO change messages via @java.util.ResourceBundle
     /*@Pattern.List({

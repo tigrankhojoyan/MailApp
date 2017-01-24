@@ -15,6 +15,6 @@
 </head>
 <body>
 
-<H1>Welcome ${loggedInUser.userName}</H1>
+<H1>Welcome ${user.userName}</H1>
 </body>
 </html>

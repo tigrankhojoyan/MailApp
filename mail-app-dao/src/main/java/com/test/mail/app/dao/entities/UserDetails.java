@@ -3,7 +3,10 @@ package com.test.mail.app.dao.entities;
 import com.test.mail.app.dao.entities.enums.Gender;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -30,11 +33,17 @@ public class UserDetails implements Serializable {
 
     @Column(name = "BIRTH_DATE", nullable = false)
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private LocalDate birthDate;
 
     @Column(name = "GENDER")
     @Enumerated(EnumType.STRING)
     private Gender gender;
+
+    @Email
+    @NotEmpty
+    @Column(name = "email")
+    private String email;
 
     public UserDetails() {
     }
@@ -42,6 +51,12 @@ public class UserDetails implements Serializable {
     public UserDetails(LocalDate birthDate, Gender gender) {
         setBirthDate(birthDate);
         setGender(gender);
+    }
+
+    public UserDetails(LocalDate birthDate, Gender gender, String email) {
+        setBirthDate(birthDate);
+        setGender(gender);
+        setEmail(email);
     }
 
 /*    public UserDetails(LocalDate birthDate, Gender gender, User user) {
@@ -82,6 +97,18 @@ public class UserDetails implements Serializable {
         this.gender = gender;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setUserDataId(Long userDataId) {
+        this.userDataId = userDataId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -99,9 +126,9 @@ public class UserDetails implements Serializable {
     @Override
     public int hashCode() {
         int result = userDataId != null ? userDataId.hashCode() : 0;
-//        result = 31 * result + (user != null ? user.hashCode() : 0);
         result = 31 * result + (birthDate != null ? birthDate.hashCode() : 0);
         result = 31 * result + (gender != null ? gender.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
         return result;
     }
 
@@ -109,9 +136,9 @@ public class UserDetails implements Serializable {
     public String toString() {
         return "UserDetails{" +
                 "userDataId=" + userDataId +
-//                ", user=" + user.getUserName() +
                 ", birthDate=" + birthDate +
                 ", gender=" + gender +
+                ", email='" + email + '\'' +
                 '}';
     }
 }

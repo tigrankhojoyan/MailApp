@@ -1,19 +1,27 @@
 package com.test.mail.app.web.controller;
 
 import com.test.mail.app.dao.entities.User;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 /**
  * Created by tigran on 1/7/17.
  */
 public interface UserMVCController {
 
-    ModelAndView displayLogIn();
+    String displayLogIn(ModelMap model);
 
-    ModelAndView executeLogeIn(@ModelAttribute("loginUser")User loginUser, RedirectAttributes redir);
+    String executeLogeIn(@Valid User loginUser,/* RedirectAttributes redir, */BindingResult result, ModelMap modelMap);
 
     ModelAndView displayUserPage(@ModelAttribute("loggedInUser")User loggedInUser );
+
+    String displayRegistration(ModelMap model);
+
+    String executeRegistration(@Valid User loginUser, BindingResult result, ModelMap modelMap);
 
 }
