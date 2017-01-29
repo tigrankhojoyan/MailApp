@@ -63,7 +63,10 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
     }
 
     @Override
-    public User updateUserPassword(String userName, String oldPassword, String newPassword) {
-        return null;//TODO
+    public User updateUserPassword(String userName, String oldPassword, String newPassword) throws DaoException {
+        User user = findByUserName(userName);
+        user.setPassword(newPassword);
+        getSession().update(user);
+        return user;
     }
 }

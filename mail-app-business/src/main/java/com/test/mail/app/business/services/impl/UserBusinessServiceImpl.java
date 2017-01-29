@@ -89,6 +89,8 @@ public class UserBusinessServiceImpl implements UserBusinessService {
             } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
                throw new BusinessException(e);
             }
+        } else {
+            throw new BusinessException(String.format("The entered '%s' user not found.", userName));
         }
         return foundUser;
     }

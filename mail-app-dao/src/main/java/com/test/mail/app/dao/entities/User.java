@@ -6,6 +6,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -44,6 +45,14 @@ public class User implements Serializable {
     })*/
     private String password;
 
+    @Column(name = "FIRST_NAME")
+    @Pattern(regexp = PatternConstants.NAME_SURNAME_PATTERN)
+    private String firstName;
+
+    @Column(name = "LAST_NAME")
+    @Pattern(regexp = PatternConstants.NAME_SURNAME_PATTERN)
+    private String lastName;
+
     @OneToOne//(mappedBy="user")
     @JoinColumn(name="USER_DATA_ID")
     @Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
@@ -64,9 +73,25 @@ public class User implements Serializable {
         setPassword(password);
     }
 
+    public User(String userName, String password, String firstName, String lastName) {
+        setUserName(userName);
+        setPassword(password);
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
     public User(String userName, String password, UserDetails userDetails) {
         setUserName(userName);
         setPassword(password);
+//        userDetails.setUser(this);
+        setUserDetails(userDetails);
+    }
+
+    public User(String userName, String password, UserDetails userDetails, String firstName, String lastName) {
+        setUserName(userName);
+        setPassword(password);
+        this.lastName = lastName;
+        this.firstName = firstName;
 //        userDetails.setUser(this);
         setUserDetails(userDetails);
     }
@@ -118,6 +143,22 @@ public class User implements Serializable {
         userMusics.add(music);
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -126,19 +167,22 @@ public class User implements Serializable {
         User user = (User) o;
 
         if (userId != null ? !userId.equals(user.userId) : user.userId != null) return false;
-        if (userName != null ? !userName.equals(user.userName) : user.userName != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
-        if (userDetails != null ? !userDetails.equals(user.userDetails) : user.userDetails != null) return false;
-        return !(userMusics != null ? !userMusics.equals(user.userMusics) : user.userMusics != null);
+        if (!userName.equals(user.userName)) return false;
+        if (!password.equals(user.password)) return false;
+        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
+        return !(userDetails != null ? !userDetails.equals(user.userDetails) : user.userDetails != null);
 
     }
 
     @Override
     public int hashCode() {
         int result = userId != null ? userId.hashCode() : 0;
-        result = 31 * result + (userName != null ? userName.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (userMusics != null ? userMusics.hashCode() : 0);
+        result = 31 * result + userName.hashCode();
+        result = 31 * result + password.hashCode();
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (userDetails != null ? userDetails.hashCode() : 0);
         return result;
     }
 
@@ -148,6 +192,8 @@ public class User implements Serializable {
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", userDetails=" + userDetails +
                 ", userMusics=" + userMusics +
                 '}';
