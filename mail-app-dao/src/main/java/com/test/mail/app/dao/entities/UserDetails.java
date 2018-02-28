@@ -17,23 +17,24 @@ import java.io.Serializable;
  * Created by tigran on 11/6/16.
  */
 @Entity
-@Table(name="USER_DETAILS")
+@Table(name = "USER_DETAILS")
 public class UserDetails implements Serializable {
 
-//    @GenericGenerator(name = "generator", strategy = "foreign",
+    //    @GenericGenerator(name = "generator", strategy = "foreign",
 //            parameters = @Parameter(name = "property", value = "user"))
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)//(generator = "generator")
-    @Column(name = "USER_DATA_ID", unique = true/*, nullable = false*/)
+    @Column(name = "USER_DETAIL_ID")
+    @GeneratedValue(generator = "gen")
+    @GenericGenerator(name = "gen", strategy = "foreign", parameters = @Parameter(name = "property", value = "user"))
     private Long userDataId;
 
-   /* @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
-    private User user;*/
+    private User user;
 
     @Column(name = "BIRTH_DATE", nullable = false)
-    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    @DateTimeFormat(pattern="yyyy-MM-dd")
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthDate;
 
     @Column(name = "GENDER")
@@ -41,7 +42,7 @@ public class UserDetails implements Serializable {
     private Gender gender;
 
     @Email
-    @NotEmpty
+//    @NotEmpty
     @Column(name = "email")
     private String email;
 
@@ -73,13 +74,13 @@ public class UserDetails implements Serializable {
         this.userDataId = userDataId;
     }
 
-   /* public User getUser() {
+    public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-    }*/
+    }
 
     public LocalDate getBirthDate() {
         return birthDate;

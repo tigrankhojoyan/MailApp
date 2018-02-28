@@ -2,10 +2,13 @@ package com.test.mail.app.dao.entities;
 
 import com.test.mail.app.dao.utils.PBKDF2Generator;
 import com.test.mail.app.dao.utils.PatternConstants;
-import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.*;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -17,7 +20,7 @@ import java.util.List;
  * Created by tigran on 11/6/16.
  */
 @Entity
-@Table(name="users")
+@Table(name = "users")
 public class User implements Serializable {
 
     @Id
@@ -35,7 +38,8 @@ public class User implements Serializable {
     @Column(name = "PASSWORD", nullable = false)
     @NotEmpty
     /*@Size(min = PatternConstants.PASSWORD_MIN_LENGTH, max = PatternConstants.PASSWORD_MAX_LENGTH,
-            message = "UserName's length must be between 6 and 14.")*///TODO change messages via @java.util.ResourceBundle
+            message = "UserName's length must be between 6 and 14.")*/
+//TODO change messages via @java.util.ResourceBundle
     /*@Pattern.List({
             @Pattern(regexp = "(?=.*[0-9])", message = "Password must contain one digit."),
             @Pattern(regexp = "(?=.*[a-z])", message = "Password must contain one lowercase letter."),
@@ -44,15 +48,13 @@ public class User implements Serializable {
     })*/
     private String password;
 
-    @OneToOne//(mappedBy="user")
-    @JoinColumn(name="USER_DATA_ID")
-    @Cascade(value=org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserDetails userDetails;
 
-    @ManyToMany(targetEntity = UserMusic.class, cascade = { CascadeType.ALL }, fetch = FetchType.LAZY)
+    @ManyToMany(targetEntity = UserMusic.class, cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinTable(name = "MUSIC_ITEMS",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "music_id") })
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "music_id")})
     private List<UserMusic> userMusics;
 
     public User() {
@@ -112,7 +114,7 @@ public class User implements Serializable {
     }
 
     public void addMusic(UserMusic music) {
-        if(userMusics == null) {
+        if (userMusics == null) {
             userMusics = new ArrayList<>();
         }
         userMusics.add(music);

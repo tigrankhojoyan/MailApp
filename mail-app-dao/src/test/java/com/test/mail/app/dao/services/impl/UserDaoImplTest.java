@@ -144,8 +144,8 @@ public class UserDaoImplTest {
         UserDetails testUserDetails3 = new UserDetails(LocalDate.fromDateFields(new Date()), Gender.MALE);
         User testUser2 = new User("testUser2", "testPassword2", testUserDetails2);
         User testUser3 = new User("testUser3", "testPassword3", testUserDetails3);
-//        testUserDetails2.setUser(testUser2);
-//        testUserDetails3.setUser(testUser3);
+        testUserDetails2.setUser(testUser2);
+        testUserDetails3.setUser(testUser3);
 
         userDao.saveUser(testUser);
         userDao.saveUser(testUser2);

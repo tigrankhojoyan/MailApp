@@ -22,7 +22,10 @@ public class UserDaoImpl extends AbstractDao implements UserDao {
 
     @Override
     public Long saveUser(User user) throws DaoException {
-        return (Long)getSession().save(user);
+        if(user.getUserDetails() != null && user.getUserDetails().getUser() == null) {
+            user.getUserDetails().setUser(user);
+        }
+        return (Long) getSession().save(user);
     }
 
     @Override
