@@ -10,11 +10,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.validation.Valid;
@@ -40,6 +40,15 @@ public class UserMVCControllerImpl implements UserMVCController {
         return "login";
     }
 
+    @RequestMapping(value="/user",method= RequestMethod.GET)
+    public String displayUserPAge(ModelMap model) {
+        User loggedInUser = (User) model.get("user");
+        if(loggedInUser == null || loggedInUser.getUserName() == null || loggedInUser.getPassword() == null) {
+            return "redirect:/api/usermvc/login";
+        }
+        return "user";
+    }
+
     @Override
     @RequestMapping(value="/login",method= RequestMethod.POST)
     public String executeLogeIn(@Valid User loginUser, /*RedirectAttributes redirectAttributes,*/ BindingResult result, ModelMap modelMap) {
@@ -52,18 +61,21 @@ public class UserMVCControllerImpl implements UserMVCController {
             User loggedInUser = userService.loginUser(loginUser.getUserName(), loginUser.getPassword());
             modelMap.addAttribute("user", loggedInUser);
 //            redirectAttributes.addFlashAttribute("loggedInUser", loggedInUser);
-            return "user";
+            return "redirect:/api/usermvc/user";
         } catch (BusinessException e) {
             e.printStackTrace();
+            result.addError(new ObjectError("common", "Invalid credentials given!"));
         } catch (DaoException e) {
             e.printStackTrace();
+            result.addError(new ObjectError("common", "Unknown error. Please try again."));
         }
         return "login";
     }
 
     @Override
-    @RequestMapping(value="/user",method= RequestMethod.GET)
+//    @RequestMapping(value="/user",method= RequestMethod.GET)
     public ModelAndView displayUserPage(@ModelAttribute("loggedInUser") User loggedInUser) {
+        System.out.println("ppppppppppppppppppppppppdffffffffffffffffffff");
         if(loggedInUser == null || loggedInUser.getUserName() == null || loggedInUser.getPassword() == null) {
             return new ModelAndView(new RedirectView("login"));
         }

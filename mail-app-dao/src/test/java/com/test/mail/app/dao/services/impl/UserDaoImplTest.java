@@ -41,7 +41,8 @@ public class UserDaoImplTest {
     @Before
     public void setUp() {
         testUserDetails = new UserDetails(LocalDate.fromDateFields(new Date()), Gender.FEMALE);
-        testUser = new User("testUserName", "test1Password", testUserDetails);
+        testUserDetails.setEmail("testmail@test.com");
+        testUser = new User("testUserName", "test1Password", testUserDetails, "firstName", "LastName");
 //        testUserDetails.setUser(testUser);
     }
 
@@ -110,6 +111,19 @@ public class UserDaoImplTest {
     @Test
     @Transactional
     @Rollback(true)
+    public void testUpdatePassword() throws Exception {
+        userDao.saveUser(testUser);
+        User persistedUser = userDao.findByUserName("testUserName");
+        userDao.updateUserPassword("testUserName", "test1Password", "test2Password");
+        System.out.println(persistedUser);
+        Assert.assertEquals(testUser.getUserName(), persistedUser.getUserName());
+        Assert.assertEquals("test2Password", persistedUser.getPassword());
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback(true)
     public void testAddMusic() throws Exception {
         userDao.saveUser(testUser);
         User persistedUser = userDao.findByUserName("testUserName");
@@ -131,7 +145,7 @@ public class UserDaoImplTest {
     @Rollback(true)
     public void testSaveUserUsingDuplicateUserNames() throws Exception {
         userDao.saveUser(testUser);
-        User duplicateUser = new User("testUserName", "testPassword2", testUserDetails);
+        User duplicateUser = new User("testUserName", "testPassword2", testUserDetails, "FNDup", "LNDup");
         ;
         userDao.saveUser(duplicateUser);
     }
@@ -141,9 +155,13 @@ public class UserDaoImplTest {
     @Rollback(true)
     public void testFindAllUsers() throws Exception {
         UserDetails testUserDetails2 = new UserDetails(LocalDate.fromDateFields(new Date()), Gender.FEMALE);
+        testUserDetails2.setEmail("test2mail@test.com");
         UserDetails testUserDetails3 = new UserDetails(LocalDate.fromDateFields(new Date()), Gender.MALE);
-        User testUser2 = new User("testUser2", "testPassword2", testUserDetails2);
-        User testUser3 = new User("testUser3", "testPassword3", testUserDetails3);
+        testUserDetails3.setEmail("test3mail@test.com");
+        User testUser2 = new User("testUser2", "testPassword2", testUserDetails2, "FirstNametw", "LAstNametw");
+        User testUser3 = new User("testUser3", "testPassword3", testUserDetails3, "FirstNameth", "LAstNameth");
+//        testUserDetails2.setUser(testUser2);
+//        testUserDetails3.setUser(testUser3);
         testUserDetails2.setUser(testUser2);
         testUserDetails3.setUser(testUser3);
 

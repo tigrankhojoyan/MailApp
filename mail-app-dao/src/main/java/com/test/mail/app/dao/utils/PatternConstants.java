@@ -12,6 +12,7 @@ public final class PatternConstants {
 
     public static final String USERNAME_PATTERN = "[a-zA-z0-9_]+";
     public static final String PASSWORD_PATTERN = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$)+";
+    public static final String NAME_SURNAME_PATTERN = "[a-zA-z]{2,20}$";
 
     /**
      * Throws runtime exception when tries to init the class.
