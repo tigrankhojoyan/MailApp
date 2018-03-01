@@ -44,7 +44,6 @@ public class User implements Serializable {
     })*/
     private String password;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @Column(name = "FIRST_NAME")
     @Pattern(regexp = PatternConstants.NAME_SURNAME_PATTERN)
     private String firstName;
@@ -58,6 +57,9 @@ public class User implements Serializable {
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "music_id") })
     private List<UserMusic> userMusics;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserDetails userDetails;
 
     public User() {
 

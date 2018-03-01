@@ -2,6 +2,7 @@ package com.test.mail.app.web.controller.impl;
 
 import com.test.mail.app.business.exceptions.BusinessException;
 import com.test.mail.app.business.services.UserBusinessService;
+import com.test.mail.app.dao.entities.Test;
 import com.test.mail.app.dao.entities.User;
 import com.test.mail.app.dao.exceptions.DaoException;
 import com.test.mail.app.web.controller.UserController;
@@ -49,6 +50,17 @@ public class UserControllerImpl implements UserController {
             return new ResponseEntity<Object>(errorMessage, HttpStatus.BAD_REQUEST);
         }
     }
+
+    public ResponseEntity<Object> test(@RequestBody Test user) {
+
+            return new ResponseEntity<Object>(user, HttpStatus.ACCEPTED);
+    }
+
+    @RequestMapping(value = { "" })
+    public String homePage() {
+        return "home";
+    }
+
 
     @Override
     public ResponseEntity<String> testUrl() {
