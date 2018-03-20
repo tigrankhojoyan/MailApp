@@ -67,7 +67,7 @@ public class User implements Serializable {
     @JoinTable(name = "APP_USER_ROLES",
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_role_id") })
-    private Set<UserRole> userRole;
+    private Set<UserRole> userRole = new HashSet<UserRole>();
 
     public User() {
 

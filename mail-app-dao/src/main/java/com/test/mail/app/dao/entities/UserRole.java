@@ -1,5 +1,7 @@
 package com.test.mail.app.dao.entities;
 
+import com.test.mail.app.dao.entities.enums.UserProfileType;
+
 import javax.persistence.*;
 
 /**
@@ -9,7 +11,7 @@ import javax.persistence.*;
 @Table(name = "user_roles")
 public class UserRole {
     private Integer userRoleId;
-    private String role;
+    private String role = UserProfileType.USER.getRole();
 
     public UserRole() {
     }
@@ -20,8 +22,6 @@ public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_role_id",
-            unique = true, nullable = false)
     public Integer getUserRoleId() {
         return this.userRoleId;
     }
@@ -30,7 +30,7 @@ public class UserRole {
         this.userRoleId = userRoleId;
     }
 
-    @Column(name = "role", nullable = false, length = 45)
+    @Column(name = "role", nullable = false, length = 45, unique=true)
     public String getRole() {
         return this.role;
     }
