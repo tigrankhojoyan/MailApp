@@ -2,7 +2,6 @@ package com.test.mail.app.dao.entities;
 
 import com.test.mail.app.dao.utils.PBKDF2Generator;
 import com.test.mail.app.dao.utils.PatternConstants;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -10,7 +9,9 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -60,6 +61,13 @@ public class User implements Serializable {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserDetails userDetails;
+
+    @NotEmpty
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "APP_USER_ROLES",
+            joinColumns = { @JoinColumn(name = "user_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_role_id") })
+    private Set<UserRole> userRole;
 
     public User() {
 
@@ -156,6 +164,14 @@ public class User implements Serializable {
         this.lastName = lastName;
     }
 
+    public Set<UserRole> getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(Set<UserRole> userRole) {
+        this.userRole = userRole;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -191,8 +207,9 @@ public class User implements Serializable {
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", userDetails=" + userDetails +
-                ", userMusics=" + userMusics +
+                ", userDetails=" + userDetails + '\'' +
+                ", userMusics=" + userMusics + '\'' +
+                ", userRole=" + userRole +
                 '}';
     }
 }

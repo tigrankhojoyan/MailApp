@@ -7,6 +7,8 @@ import com.test.mail.app.dao.exceptions.DaoException;
 import com.test.mail.app.web.controller.UserMVCController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -17,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.sql.SQLException;
 
 /**
  * Created by tigran on 1/7/17.
@@ -33,6 +38,12 @@ public class UserMVCControllerImpl implements UserMVCController {
     @Override
     @RequestMapping(value="/login",method= RequestMethod.GET)
     public String displayLogIn(ModelMap model) {
+
+        if ( SecurityContextHolder.getContext().getAuthentication() == null ||
+                !SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+            return "redirect:/api/usermvc/user";
+        }
+
         if(model.get("user") == null) {
             User loginUser = new User();
             model.addAttribute("user", loginUser);
@@ -41,12 +52,15 @@ public class UserMVCControllerImpl implements UserMVCController {
     }
 
     @RequestMapping(value="/user",method= RequestMethod.GET)
-    public String displayUserPAge(ModelMap model) {
-        User loggedInUser = (User) model.get("user");
-        if(loggedInUser == null || loggedInUser.getUserName() == null || loggedInUser.getPassword() == null) {
-            return "redirect:/api/usermvc/login";
-        }
-        return "user";
+    public ModelAndView displayUserPAge(/*ModelMap model*/) {
+        ModelAndView model = new ModelAndView();
+        model.setViewName("user");
+        return model;
+    }
+
+    @RequestMapping(value = "/test", method = RequestMethod.GET)
+    public void test() throws SQLException {
+        throw new SQLException("test error");
     }
 
     @Override
@@ -61,7 +75,7 @@ public class UserMVCControllerImpl implements UserMVCController {
             User loggedInUser = userService.loginUser(loginUser.getUserName(), loginUser.getPassword());
             modelMap.addAttribute("user", loggedInUser);
 //            redirectAttributes.addFlashAttribute("loggedInUser", loggedInUser);
-            return "redirect:/api/usermvc/user";
+            return "user";
         } catch (BusinessException e) {
             e.printStackTrace();
             result.addError(new ObjectError("common", "Invalid credentials given!"));
@@ -100,7 +114,7 @@ public class UserMVCControllerImpl implements UserMVCController {
         }
 
         try {
-            Long registrationUserId = userService.saveUser(loginUser);
+            userService.saveUser(loginUser);
             modelMap.addAttribute("user", userService.findByUserName(loginUser.getUserName()));
 //            redirectAttributes.addFlashAttribute("loggedInUser", loggedInUser);
             return "user";
@@ -110,6 +124,17 @@ public class UserMVCControllerImpl implements UserMVCController {
             e.printStackTrace();
         }
         return "registration";
+    }
+
+    @RequestMapping(value="/logout", method = RequestMethod.POST)
+    public String logoutPage (HttpServletRequest request, HttpServletResponse response){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null){
+            //new SecurityContextLogoutHandler().logout(request, response, auth);
+//            persistentTokenBasedRememberMeServices.logout(request, response, auth);
+            SecurityContextHolder.getContext().setAuthentication(null);
+        }
+        return "redirect:/api/usermvc/login?logout";
     }
 
 

@@ -6,4 +6,9 @@
 
   <display-name>Mail Appp</display-name>
 
+    <error-page>
+        <error-code>404</error-code>
+        <location>/api/usermvc/test</location>
+    </error-page>
+
 </web-app>

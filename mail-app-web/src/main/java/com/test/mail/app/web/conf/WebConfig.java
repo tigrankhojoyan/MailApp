@@ -1,6 +1,7 @@
 package com.test.mail.app.web.conf;
 
 import com.test.mail.app.business.conf.BusinessConfig;
+import com.test.mail.app.web.security.SecurityConfig;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -17,7 +18,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @ComponentScan(basePackages = "com.test.mail.app.web")
 @EnableWebMvc
-@Import(BusinessConfig.class)
+@Import({BusinessConfig.class, SecurityConfig.class})
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     /*
