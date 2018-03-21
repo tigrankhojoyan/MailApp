@@ -2,7 +2,9 @@ package com.test.mail.app.web.controller.impl;
 
 import com.test.mail.app.business.exceptions.BusinessException;
 import com.test.mail.app.business.services.UserBusinessService;
+import com.test.mail.app.business.services.UserRoleService;
 import com.test.mail.app.dao.entities.User;
+import com.test.mail.app.dao.entities.UserRole;
 import com.test.mail.app.dao.exceptions.DaoException;
 import com.test.mail.app.web.controller.UserMVCController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -23,17 +26,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created by tigran on 1/7/17.
  */
 @Controller
 @RequestMapping("/usermvc")
+@SessionAttributes("roles")
 public class UserMVCControllerImpl implements UserMVCController {
 
     @Autowired
     @Qualifier("userBusinessService")
     private UserBusinessService userService;
+
+    @Autowired
+    UserRoleService userRoleService;
 
     @Override
     @RequestMapping(value="/login",method= RequestMethod.GET)
@@ -61,6 +69,11 @@ public class UserMVCControllerImpl implements UserMVCController {
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public void test() throws SQLException {
         throw new SQLException("test error");
+    }
+
+    @ModelAttribute("roles")
+    public List<UserRole> initializeProfiles() {
+        return userRoleService.findAll();
     }
 
     @Override

@@ -123,7 +123,7 @@
             <div class="form-group col-md-12">
                 <label class="col-md-3 control-lable" for="userRole">Roles</label>
                 <div class="col-md-7">
-                    <form:select path="userRole" items="{ADMIN, USER}" multiple="true" itemValue="id" itemLabel="type" class="form-control input-sm" />
+                    <form:select path="userRole" items="${roles}" multiple="true" itemValue="userRoleId" itemLabel="role" class="form-control input-sm" />
                     <div class="has-error">
                         <form:errors path="userRole" class="help-inline"/>
                     </div>

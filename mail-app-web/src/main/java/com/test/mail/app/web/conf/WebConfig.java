@@ -1,13 +1,16 @@
 package com.test.mail.app.web.conf;
 
 import com.test.mail.app.business.conf.BusinessConfig;
+import com.test.mail.app.web.converter.RoleToUserProfileConverter;
 import com.test.mail.app.web.security.SecurityConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
@@ -21,6 +24,9 @@ import org.springframework.web.servlet.view.JstlView;
 @Import({BusinessConfig.class, SecurityConfig.class})
 public class WebConfig extends WebMvcConfigurerAdapter {
 
+    @Autowired
+    RoleToUserProfileConverter roleToUserProfileConverter;
+
     /*
     * Configure ResourceHandlers to serve static resources like CSS/ Javascript etc...
     *
@@ -28,6 +34,16 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("/static/");
+    }
+
+
+    /**
+     * Configure Converter to be used.
+     * In our example, we need a converter to convert string values[Roles] to UserProfiles in newUser.jsp
+     */
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(roleToUserProfileConverter);
     }
 
     /*
