@@ -69,8 +69,31 @@
             <i class="fa fa-folder-open"></i> Backup
           </a>
         </li>
+        <li>
+          <form action="singleFileUpload" method="post" enctype="multipart/form-data" <%--hidden="hidden"--%>>
+                <input type="file" name="file" id="uploadMusic">
+                <button type="submit" >Upload</button>
+          </form>
+          <a href="javascript:document.getElementById('uploadMusic').submit()">
+            <i class="fa fa-cloud-upload"></i> Upload Music
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <i class="fa fa-upload"></i> Upload Profile picture
+          </a>
+        </li>
+        <li>
+            <c:if test="${pageContext.request.userPrincipal.name != null}">
+              <a href="javascript:document.getElementById('logout').submit()"><i class="fa fa-sign-out"></i>Logout</a>
+            </c:if>
+        </li>
       </ul><!-- /.nav -->
     </div>
+    <c:url value="/api/usermvc/logout" var="logoutUrl" />
+    <form id="logout" action="${logoutUrl}" method="post" >
+      <%--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />--%>
+    </form>
     <div class="col-sm-9">
 
       <!-- resumt -->
