@@ -7,6 +7,9 @@ import com.test.mail.app.dao.entities.User;
 import com.test.mail.app.dao.entities.UserRole;
 import com.test.mail.app.dao.exceptions.DaoException;
 import com.test.mail.app.web.controller.UserMVCController;
+import com.test.mail.app.web.exceptions.MailWebException;
+import com.test.mail.app.web.util.FileActions;
+import com.test.mail.app.web.util.PropertiesReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -42,6 +45,9 @@ public class UserMVCControllerImpl implements UserMVCController {
     @Autowired
     @Qualifier("userBusinessService")
     private UserBusinessService userService;
+
+    @Autowired
+    PropertiesReader propertiesReader;
 
     @Autowired
     UserRoleService userRoleService;
@@ -130,6 +136,7 @@ public class UserMVCControllerImpl implements UserMVCController {
         }
 
         try {
+            FileActions.createUserFolder(propertiesReader.getUserProperties().getProperty("user.dir.path"), loginUser.getUserName());
             userService.saveUser(loginUser);
             modelMap.addAttribute("user", userService.findByUserName(loginUser.getUserName()));
 //            redirectAttributes.addFlashAttribute("loggedInUser", loggedInUser);
@@ -137,6 +144,8 @@ public class UserMVCControllerImpl implements UserMVCController {
         } catch (BusinessException e) {
             e.printStackTrace();
         } catch (DaoException e) {
+            e.printStackTrace();
+        } catch (MailWebException e) {
             e.printStackTrace();
         }
         return "registration";
@@ -154,14 +163,14 @@ public class UserMVCControllerImpl implements UserMVCController {
     }
 
     @PostMapping("/singleFileUpload")
-    public String singleFileUpload(@RequestParam("file") MultipartFile file, Model model)
+    public String singleFileUpload(@RequestParam("musicFile") MultipartFile file, Model model)
             throws IOException {
 
         // Save file on system
         if (!file.getOriginalFilename().isEmpty()) {
             BufferedOutputStream outputStream = new BufferedOutputStream(
                     new FileOutputStream(
-                            new File("D:/SingleFileUpload", file.getOriginalFilename())));
+                            new File(propertiesReader.getUserProperties().getProperty("user.dir.path"), file.getOriginalFilename())));
             outputStream.write(file.getBytes());
             outputStream.flush();
             outputStream.close();

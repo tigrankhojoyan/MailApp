@@ -11,14 +11,42 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<%--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>--%>
 
 <!------ Include the above in your HEAD tag ---------->
 <html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <head>
     <title>User Page</title>
   <link href="<c:url value='/static/css/user_bootstrap.css' />" rel="stylesheet"/>
+    <script >
+
+        $(document).ready(function(){
+            $("#uploadMusicLink").click(function(){
+                document.getElementById("uploadMusic").click();
+                // alert("Hello! I am an alert box!!");
+            });
+        });
+
+        function sleepFor( sleepDuration ){
+            var now = new Date().getTime();
+            while(new Date().getTime() < now + sleepDuration){ /* do nothing */ }
+        }
+
+        $(document).ready(function(){
+            $("#uploadMusic").on("change", function(){
+                sleepFor(1000);
+                document.getElementById("uploadMusicButton").click();
+                // alert("Hello! I am an alert box!!");
+            });
+        });
+
+
+      /*  document.getElementById("uploadMusic").onchange = function() {
+            document.getElementById("singleFileUpload").submit();
+        };*/
+
+    </script>
 </head>
 <body>
 
@@ -70,11 +98,12 @@
           </a>
         </li>
         <li>
-          <form action="singleFileUpload" method="post" enctype="multipart/form-data" <%--hidden="hidden"--%>>
-                <input type="file" name="file" id="uploadMusic">
-                <button type="submit" >Upload</button>
+          <form action="singleFileUpload" method="post" enctype="multipart/form-data" hidden="hidden">
+                <input type="file" name="musicFile" id="uploadMusic">
+                <button type="submit" id="uploadMusicButton">Upload</button>
           </form>
-          <a href="javascript:document.getElementById('uploadMusic').submit()">
+
+          <a href="#" id="uploadMusicLink">
             <i class="fa fa-cloud-upload"></i> Upload Music
           </a>
         </li>
