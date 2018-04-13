@@ -12,8 +12,11 @@ import com.test.mail.app.web.util.FileActions;
 import com.test.mail.app.web.util.PropertiesReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -51,6 +54,9 @@ public class UserMVCControllerImpl implements UserMVCController {
 
     @Autowired
     UserRoleService userRoleService;
+
+    @Autowired
+    protected AuthenticationManager authenticationManager;
 
     @Override
     @RequestMapping(value="/login",method= RequestMethod.GET)
@@ -130,7 +136,7 @@ public class UserMVCControllerImpl implements UserMVCController {
 
     @Override
     @RequestMapping(value = "registration", method = RequestMethod.POST)
-    public String executeRegistration(@Valid User loginUser, BindingResult result, ModelMap modelMap) {
+    public String executeRegistration(@Valid User loginUser, BindingResult result, ModelMap modelMap,  HttpServletRequest request, HttpServletResponse response) {
         if (result.hasErrors()) {
             return "registration";
         }
@@ -140,7 +146,8 @@ public class UserMVCControllerImpl implements UserMVCController {
             userService.saveUser(loginUser);
             modelMap.addAttribute("user", userService.findByUserName(loginUser.getUserName()));
 //            redirectAttributes.addFlashAttribute("loggedInUser", loggedInUser);
-            return "user";
+            authenticateUserAndSetSession(loginUser, request);
+            return "redirect:/api/usermvc/user";
         } catch (BusinessException e) {
             e.printStackTrace();
         } catch (DaoException e) {
@@ -166,11 +173,14 @@ public class UserMVCControllerImpl implements UserMVCController {
     public String singleFileUpload(@RequestParam("musicFile") MultipartFile file, Model model)
             throws IOException {
 
+        org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         // Save file on system
         if (!file.getOriginalFilename().isEmpty()) {
             BufferedOutputStream outputStream = new BufferedOutputStream(
                     new FileOutputStream(
-                            new File(propertiesReader.getUserProperties().getProperty("user.dir.path"), file.getOriginalFilename())));
+                            new File(propertiesReader.getUserProperties().getProperty("user.dir.path").concat(File.separator).concat(user.getUsername()),
+                                    file.getOriginalFilename())));
             outputStream.write(file.getBytes());
             outputStream.flush();
             outputStream.close();
@@ -183,5 +193,18 @@ public class UserMVCControllerImpl implements UserMVCController {
         return "user";
     }
 
+    private void authenticateUserAndSetSession(User user, HttpServletRequest request) {
+        String username = user.getUserName();
+        String password = user.getPassword();
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
+
+        // generate session if one doesn't exist
+        request.getSession();
+
+        token.setDetails(new WebAuthenticationDetails(request));
+        Authentication authenticatedUser = authenticationManager.authenticate(token);
+
+        SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+    }
 
 }
