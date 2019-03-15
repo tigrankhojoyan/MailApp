@@ -2,6 +2,7 @@ package com.test.mail.app.web.controller.impl;
 
 import com.test.mail.app.business.exceptions.BusinessException;
 import com.test.mail.app.business.services.UserBusinessService;
+import com.test.mail.app.business.services.UserFileActionService;
 import com.test.mail.app.business.services.UserRoleService;
 import com.test.mail.app.dao.entities.User;
 import com.test.mail.app.dao.entities.UserRole;
@@ -57,6 +58,10 @@ public class UserMVCControllerImpl implements UserMVCController {
 
     @Autowired
     protected AuthenticationManager authenticationManager;
+
+    @Autowired
+    @Qualifier("UserFileActionService")
+    private UserFileActionService userFileActionService;
 
     @Override
     @RequestMapping(value="/login",method= RequestMethod.GET)
@@ -174,8 +179,15 @@ public class UserMVCControllerImpl implements UserMVCController {
             throws IOException {
 
         org.springframework.security.core.userdetails.User user = (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            userFileActionService.uploadUserMusic(propertiesReader.getUserProperties().getProperty("user.dir.path"), file.getOriginalFilename(), user.getUsername(), file.getBytes());
+            model.addAttribute("msg", "File uploaded successfully.");
+        } catch (IOException ex) {
+            model.addAttribute("msg", "Please select a valid file..");
+        }
 
-        // Save file on system
+
+/*        // Save file on system
         if (!file.getOriginalFilename().isEmpty()) {
             BufferedOutputStream outputStream = new BufferedOutputStream(
                     new FileOutputStream(
@@ -188,7 +200,7 @@ public class UserMVCControllerImpl implements UserMVCController {
             model.addAttribute("msg", "File uploaded successfully.");
         } else {
             model.addAttribute("msg", "Please select a valid file..");
-        }
+        }*/
 
         return "user";
     }

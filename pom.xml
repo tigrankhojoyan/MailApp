@@ -26,8 +26,9 @@
         <hsqldb-version>2.3.4</hsqldb-version>
         <hibernate-jpa-version>1.0.0.Final</hibernate-jpa-version>
         <hibernate-validator-version>5.3.3.Final</hibernate-validator-version>
-        <commons-validator-version>1.5.1</commons-validator-version>
+        <commons-io-version>2.6</commons-io-version>
         <commons-logging-version>1.2</commons-logging-version>
+        <commons-validator-version>1.5.1</commons-validator-version>
         <mockito-all-version>1.9.5</mockito-all-version>
         <spring.security.version>4.1.1.RELEASE</spring.security.version>
         <jackson-mapper-asl-version>1.9.13</jackson-mapper-asl-version>
@@ -72,6 +73,13 @@
                 <groupId>commons-fileupload</groupId>
                 <artifactId>commons-fileupload</artifactId>
                 <version>${commons-fileupload-version}</version>
+            </dependency>
+
+            <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io-version}</version>
             </dependency>
 
             <!-- Spring -->

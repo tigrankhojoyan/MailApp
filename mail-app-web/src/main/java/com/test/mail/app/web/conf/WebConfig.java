@@ -35,7 +35,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**").addResourceLocations("/static/");
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("/static/");
+
+       /* registry.addResourceHandler("/images/**")
+                .addResourceLocations("file:E:/Java Projects/TestRepo/mailAppUsers/");*/
     }
 
 
